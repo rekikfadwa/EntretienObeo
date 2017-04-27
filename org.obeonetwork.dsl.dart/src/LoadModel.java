@@ -1,12 +1,17 @@
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -81,11 +86,24 @@ public class LoadModel {
 	static void printLabelofElementsUsingIterator(TreeIterator<EObject> iterator) {
 		EObject next;
 		int nItems = 0;
+		EClass eclass;
+		EList<EAttribute> atrList;
+		Iterator<EAttribute> it;
 		while (iterator.hasNext()) {
 			next = iterator.next();
-			if (next instanceof Asset) {
-				System.out.println(nItems + " - " + ((Asset) next).getName());
+			atrList= next.eClass().getEAllAttributes();
+			it = atrList.iterator();
+			while(it.hasNext()){			
+				EAttribute at =it.next();
+				if (at!=null && at.getName().equals("name")) {
+					System.out.println(nItems + " - " + next.eGet(at));
+				}
 			}
+//			if (next instanceof Asset) {
+//				System.out.println(nItems + " - " + ((Asset) next).getName());
+//			}else if (next instanceof Package) {
+//				System.out.println(nItems + " - " + ((Package) next).getName());
+//			}
 			nItems++;
 		}
 	}
